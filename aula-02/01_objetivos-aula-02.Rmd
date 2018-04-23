@@ -1,0 +1,46 @@
+---
+title: "Conteúdo programado para a aula"
+output: html_notebook
+---
+
+## Revisão aula 01
+
+- Nossas ferramentas diárias serão a linguagem R e o ambiente de desenvolvimento RStudio
+<br/><br/>
+    - Considerem o R como sendo o motor de um carro e o RStudio como o painel do mesmo :-)
+<br/><br/>
+
+- A linguagem R é composta do seu _core_ e complementada com milhares de pacotes para as mais diversas finalidades, disponíveis em repositórios de onde os instalamos
+<br/><br/>
+    - R é como um smartphone recém tirado da caixa
+    - Pacotes são como os aplicativos que você instala para dar novas funções ao seu smartphone
+    - Repositórios são como as App Stores
+<br/><br/>
+
+- O RStudio:
+<br/><br/>
+![](images/rstudio-editor.png)
+
+## Aula 02
+
+Sugestão de site com guias por atividade: [Quick-R](https://www.statmethods.net)
+
+Nesta aula cobriremos:
+
+#. Tipos numéricos da linguagem R
+    - _integer_
+    - _numeric_
+    - _logical_
+
+#. Estruturas de dados comuns
+    - vetores
+    - listas
+    - elementos nomeados
+
+#. Operadores comuns para tipos numéricos
+    - Operações vetoriais
+    - Operadores aritméticos
+    - Operadores lógicos
+
+#. Atividade prática
+    - Vamos exercitar o uso da linguagem R e do RStudio através de operações sobre vetores e listas
