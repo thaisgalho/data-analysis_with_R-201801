@@ -20,7 +20,7 @@ str(acessos_alunos)
 ## Dica: Vimos um exemplo no mesmo material sobre estruturas de dados
 ### # ###
 
-
+length(acessos_alunos)
 
 ### 3 ###
 ## Utilizando o seu código de aluno da Uniritter como nome de um valor da lista, imprima uma linha informando quantos acessos
@@ -30,8 +30,8 @@ str(acessos_alunos)
 ## Dica 1: Utilize a função paste() para composição do texto que será impresso. 
 ## Dica 2: Vimos exemplos disto nos materiais dos tipos numéricos e das estruturas de dados.
 ### # ###
-
-
+meus_acessos <- acessos_alunos$alu201830160
+print( paste(paste("O aluno alu201830160 realizou", meus_acessos), "acessos"))
 
 ### 4 ###
 ## A operação abaixo cria um vetor com todas as quantidades de acessos por aluno.
