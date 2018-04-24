@@ -126,6 +126,8 @@ print( is.na(valor_ausente) )
 1 / 0
 0 / 0
 
+Inf - 1
+
 #' 
 #' 
 #' 
