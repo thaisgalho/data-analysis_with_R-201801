@@ -30,8 +30,7 @@ length(acessos_alunos)
 ## Dica 1: Utilize a função paste() para composição do texto que será impresso. 
 ## Dica 2: Vimos exemplos disto nos materiais dos tipos numéricos e das estruturas de dados.
 ### # ###
-meus_acessos <- acessos_alunos$alu201830160
-print( paste(paste("O aluno alu201830160 realizou", meus_acessos), "acessos"))
+print( paste(paste("O aluno alu201830160 realizou", acessos_alunos$alu201830160), "acessos"))
 
 ### 4 ###
 ## A operação abaixo cria um vetor com todas as quantidades de acessos por aluno.
@@ -44,12 +43,15 @@ acessos <- unlist(acessos_alunos)
 ## 3. Determine o tamanho do vetor da operação 2, imprimindo o resultado na Console
 ### # ###
 
+meus_acessos<-acessos_alunos$alu201830160
+mais_acessos<- which(acessos_alunos>meus_acessos)
+length(mais_acessos)
 
 
 ### 5 ###
 ## Combine todas as etapas acima em uma única chamada, sem a criação dos vetores auxiliares
 ### # ###
-
+print(paste("A quantidade de colegas com mais acessos que eu é: ", length(which(acessos_alunos>acessos_alunos$alu201830160))))
 
 
 ### 6 ###
@@ -59,6 +61,7 @@ acessos <- unlist(acessos_alunos)
 ## Dica: Lembre que falamos sobre como o R faz conversões implícitas entre o tipo lógico e tipos numéricos
 ### # ###
 
+print(paste("A quantidade de colegas com menos acessos que eu é: ", sum(acessos_alunos<acessos_alunos$alu201830160)))
 
 
 ### 7 ###
