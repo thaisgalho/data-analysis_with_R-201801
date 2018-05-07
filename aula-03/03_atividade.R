@@ -36,6 +36,8 @@ salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
 ##    - uma variável indicando se o servidor está lotado no mesmo órgão de exercício ou em um órgão diferente, 
 ##    - a média salarial
 ##    - o desvio padrão
+##    - a mediana
+##    - o desvio absoluto da mediana
 ##    - o menor salário
 ##    - o maior salário
 ## Analise os valores por lotação dentro de um mesmo cargo e comente ao final do exercício se você considera alguma diferença significativa.

@@ -15,7 +15,7 @@ Nesta aula trabalharemos com 2 medidas de tendência central e duas medidas de d
 
 - Medidas de Dispersão
     + Desvio Padrão
-    + Desvio Médio Absoluto
+    + Desvio Absoluto da Mediana
 
 Na próxima aula continuaremos com mais algumas medidas de tendência central e de dispersão, bem como medidas de associação entre 2 variáveis
 

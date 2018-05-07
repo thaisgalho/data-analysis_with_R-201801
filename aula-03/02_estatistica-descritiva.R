@@ -15,7 +15,7 @@
 #' 
 #' - Medidas de Dispersão
 #'     + Desvio Padrão
-#'     + Desvio Médio Absoluto
+#'     + Desvio Absoluto da Mediana
 #' 
 #' Na próxima aula continuaremos com mais algumas medidas de tendência central e de dispersão, bem como medidas de associação entre 2 variáveis
 #' 
@@ -26,7 +26,7 @@
 ## ----"Dataset", message=FALSE, warning=FALSE-----------------------------
 library(tidyverse)
 
-salarios <- read_csv("data/201802_dados_salarios_servidores.csv.gz")
+salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 
 head(salarios, 20)
 
