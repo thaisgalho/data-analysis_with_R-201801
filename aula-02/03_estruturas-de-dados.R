@@ -27,12 +27,6 @@ c(0, 1, 1, 2, 3, 5)
 # A atribuição é na direção da seta =)
 c(0, 1, 1, 2, 3, 5) -> init_fibonacci
 
-init_fibonacci + 1
-
-init_fibonacci + c(0, 1, 3, 4)
-
-c(0, 1, 1, 2, 3, 5) + c(0, 1, 3, 4, 0, 1)
-
 #' 
 #' Atomic vectors são estruturas planas, não permitindo que um vetor seja composto de outros vetores. O exemplo abaixo demonstra que a tentativa de aninhar vetores resulta em um vetor plano idêntico ao vetor criado no exemplo anterior.
 #' 
@@ -77,7 +71,7 @@ which(seq_10_from_2 > 6) # Índices
 seq_10_from_2[seq_10_from_2 > 6]
 
 # Os 3 primeiros elementos, pela sua posição
-seq_10_from_2[1:50]
+seq_10_from_2[1:3]
 
 #' 
 #' O operador `:` e a função `seq` produzem o mesmo resultado quando a função `seq` é aplicada com os dois primeiros parâmetros informados. A função `seq` é mais flexível, conforme demonstrado no segundo exemplo de uso. Percebam que os parâmetros de uma função são nomeados e podem ser informados junto aos valores atribuídos na chamada da função. Esta é uma prática recomendada para clareza.
@@ -85,7 +79,7 @@ seq_10_from_2[1:50]
 ## ------------------------------------------------------------------------
 if( identical( 1:10, seq(1, 10) )) print("São idênticos")
 
-seq(from=0, to=13, by=2)
+seq(from=0, to=10, by=2)
 
 seq(from=0, to=5, by=.5)
 
@@ -99,8 +93,6 @@ seq(from=0, to=5, by=.5)
 #' 
 ## ------------------------------------------------------------------------
 resposta <- list(7, '*', 6, '=', list(42), c("quarenta", "e", "dois"))
-
-c(7, '*', 6)
 
 # A função glimpse apresenta uma prévia do conteúdo da lista passada como parâmetro. A função `str` atende o mesmo propósito.
 dplyr::glimpse(resposta)
@@ -127,14 +119,7 @@ resposta[2:4]
 named_list <- list(number=42, spelled="quarenta e dois")
 named_list$number
 named_list$spelled
-str(named_list)
 
 # Desta forma o conteúdo pode ser utilizado como uma variável
 named_list$number * 2
-
-value <- 42
-
-value * 2
-
-list(nome = "Cristofer", idade = 2344)
 
