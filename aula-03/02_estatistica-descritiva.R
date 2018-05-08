@@ -143,6 +143,9 @@ subset_salarios %>%
 print("Atividade")
 ## Modificar o Dataset para criação de nova variável
 
+subset_salarios %>%
+mutate (ano_ingresso = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))%>%
+summarise(mean(2018-year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO)))
 ## Determine o tempo médio de trabalho em anos, em nível nacional
 
 ## Determine o tempo médio de trabalho em anos, por UF
