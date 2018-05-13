@@ -89,6 +89,7 @@ salarios %>%
 #' Qual o salário médio de um servidor público federal nos dados obtidos junto ao portal da transparência?
 #' 
 ## ------------------------------------------------------------------------
+subset_salarios
 mean(subset_salarios$REMUNERACAO_REAIS)
 
 #' 
@@ -144,14 +145,26 @@ print("Atividade")
 ## Modificar o Dataset para criação de nova variável
 
 subset_salarios %>%
-mutate (ano_ingresso = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))%>%
-summarise(mean(2018-year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO)))
-## Determine o tempo médio de trabalho em anos, em nível nacional
+  mutate (ANO_INGRESSO = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))%>%
+  select(ID_SERVIDOR_PORTAL, REMUNERACAO_REAIS, DATA_INGRESSO_ORGAO, DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO, UF_EXERCICIO,ANO_INGRESSO)%>%
 
+## Determine o tempo médio de trabalho em anos, em nível nacional
+summarise(mean(2018-ANO_INGRESSO))
+  
 ## Determine o tempo médio de trabalho em anos, por UF
+subset_salarios %>%
+  group_by(UF_EXERCICIO) %>%
+  summarise(tempo_medio = mean(2018-year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO)))%>%
+  ungroup() %>%
+  arrange(desc(tempo_medio))
 
 ## Determine a média salarial por ano de ingresso
-
+subset_salarios %>%
+  mutate (ANO_INGRESSO = year(DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))%>%
+  group_by(ANO_INGRESSO) %>%
+  summarise(salario_medio = mean(REMUNERACAO_REAIS)) %>%
+  ungroup() %>%
+  arrange(desc(salario_medio))
 
 #' >> FIM DA ATIVIDADE
 #' 
@@ -199,14 +212,22 @@ subset_salarios %>%
 print("Atividade")
 
 ## Código aqui
+subset_salarios %>%
+  group_by(UF_EXERCICIO) %>%
+  summarise( MEDIA = mean(REMUNERACAO_REAIS),MEDIANA = median(REMUNERACAO_REAIS))%>%
+  mutate(COMPARA = ifelse(MEDIA > MEDIANA, 'MEDIA_MAIOR', 'MEDIANA_MAIOR')) -> Medidas 
 
+Medidas%>%
+    select (UF_EXERCICIO, MEDIA,MEDIANA,COMPARA)%>%
+    filter(COMPARA=='MEDIANA_MAIOR')%>%
+    select (UF_EXERCICIO, MEDIA,MEDIANA,COMPARA)
 #' 
 #' __Atividade II__
 #' 
 #' Qual sua justificativa para a quantidade de casos onde a mediana foi maior que a média? Dica: Observe o gráfico que mostra a média e a mediana. Há cauda longa? Em qual direção?
 #' 
-#' ``` SUA RESPOSTA AQUI ```
-#' 
+#' A MEDIANA PODE SER MAIOR QUE A MÉDIA ONDE A DISTRIBUIÇÃO DOS DADOS FOR ENVIESADA PARA A ESQUERDA POR CONTA DE
+#' OUTLIERS MUITO PEQUENOS EM COMPARAÇÃO COM OS DEMAIS DADOS
 #' >> FIM DA ATIVIDADE
 #' 
 #' #### O que a Mediana _não_ nos diz?
@@ -302,6 +323,14 @@ print("Atividade")
 print("Atividade")
 
 ## Código aqui
+subset_salarios %>%
+  group_by(DESCRICAO_CARGO) %>%
+  summarise(MEDIA_SALARIAL=mean(REMUNERACAO_REAIS), QTDE_SERVIDORES=n(), DP=sd(REMUNERACAO_REAIS ),
+  CV=((DP*100)/MEDIA_SALARIAL),MENOR_SALARIO = min(REMUNERACAO_REAIS),MAIOR_SALARIO= max(REMUNERACAO_REAIS))%>%
+  filter(QTDE_SERVIDORES>100)%>%
+  ungroup() %>%
+  arrange((CV))%>%
+  head(10)
 
 #' 
 #' __Atividade III__
@@ -312,6 +341,14 @@ print("Atividade")
 print("Atividade")
 
 ## Código aqui
+subset_salarios %>%
+  group_by(DESCRICAO_CARGO) %>%
+  summarise(MEDIA_SALARIAL=mean(REMUNERACAO_REAIS), QTDE_SERVIDORES=n(), DP=sd(REMUNERACAO_REAIS ),
+            CV=((DP*100)/MEDIA_SALARIAL),MENOR_SALARIO = min(REMUNERACAO_REAIS),MAIOR_SALARIO= max(REMUNERACAO_REAIS))%>%
+  filter(QTDE_SERVIDORES>100)%>%
+  ungroup() %>%
+  arrange(desc(CV))%>%
+  head(10)
 
 #' 
 #' ![](https://mathwithbaddrawings.files.wordpress.com/2016/07/20160712085402_00021.jpg)
