@@ -4,7 +4,7 @@
 library(tidyverse)
 
 salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
-
+head(salarios,20)
 ### 1 ####
 ## 
 ## O arquivo possui 2 colunas de Remuneração, uma em Reais e outra em Dólares. 
@@ -13,8 +13,10 @@ salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 ## Após criar esta coluna, descarte todos os registros cuja Remuneração Final for menor que R$ 900,00
 ## 
 ### # ####
-
-
+salarios%>%
+  mutate(REMUNERACAO_FINAL= (REMUNERACAO_REAIS + (REMUNERACAO_DOLARES * 3.2421)))%>%
+  filter(REMUNERACAO_FINAL>900)%>%
+  
 ### 2 ####
 ## 
 ## Neste dataset é possível identificar que alguns servidores estão lotados em órgãos diferentes do seu órgão de exercício.
@@ -25,7 +27,22 @@ salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 salarios %>% count(UF_EXERCICIO) %>% pull(UF_EXERCICIO) -> ufs # EXEMPLO
 ## 
 ### # ####
+salarios%>%
+  filter(ORGSUP_LOTACAO!= ORGSUP_EXERCICIO)%>%
+  group_by(DESCRICAO_CARGO) %>%
+  summarise(SERVIDORES = n()) %>%
+  ungroup() %>%
+  arrange(desc(SERVIDORES))%>%
+  head(5)
 
+salarios%>%
+  filter(ORGSUP_LOTACAO!= ORGSUP_EXERCICIO)%>%
+  group_by(DESCRICAO_CARGO) %>%
+  summarise(SERVIDORES = n()) %>%
+  ungroup() %>%
+  arrange(desc(SERVIDORES))%>%
+  head(5)%>%
+  pull(DESCRICAO_CARGO) -> cargos_diferente_lotacao
 
 ### 3 ####
 ## 
@@ -48,4 +65,12 @@ salarios %>% filter(DESCRICAO_CARGO %in% c("MINISTRO DE PRIMEIRA CLASSE", "ANALI
 ## A função group_by permite múltiplos nomes de variáveis na mesma chamada.
 ## 
 ### # ####
+salarios%>%
+  filter(DESCRICAO_CARGO %in% cargos_diferente_lotacao) %>%
+  mutate(MESMO_ORGAO = ifelse(ORGSUP_LOTACAO == ORGSUP_EXERCICIO,'SIM','NAO'))%>%
+  group_by(DESCRICAO_CARGO,MESMO_ORGAO)%>%
+  summarise(MEDIA_SALARIAL = mean(REMUNERACAO_REAIS),DP= sd(REMUNERACAO_REAIS),MEDIANA = median(REMUNERACAO_REAIS),
+           D_A_M = (median(abs(REMUNERACAO_REAIS - median(REMUNERACAO_REAIS )))) / (median(REMUNERACAO_REAIS)),
+           MENOR_SALARIO = min(REMUNERACAO_REAIS), MAIOR_SALARIO = max(REMUNERACAO_REAIS))
+##grande diferença no desvio padrao nos cargos entre os lotados no mesmo orgao e os não lotados no mesmo orgao
 
