@@ -42,7 +42,7 @@ options(encoding = "UTF-8")
 #' 
 ## ----"Dataset", message=FALSE, warning=FALSE-----------------------------
 library(tidyverse)
-
+library(lubridate)
 subset_salarios <- read_csv("aula-04/data/201802_dados_salarios_servidores.csv.gz") %>%
   filter(REMUNERACAO_REAIS > 900, !is.na(UF_EXERCICIO)) %>%
   select(ID_SERVIDOR_PORTAL, REMUNERACAO_REAIS, DESCRICAO_CARGO, DATA_INGRESSO_ORGAO, ORGSUP_EXERCICIO, DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO, UF_EXERCICIO)
@@ -168,6 +168,10 @@ print("Atividade")
 
 ## Código aqui
 
+(DA <- median( abs( subset_salarios$REMUNERACAO_REAIS - median( subset_salarios$REMUNERACAO_REAIS ))))
+(MEDIANA <- median( subset_salarios$REMUNERACAO_REAIS ))
+RES_DAM = DA / MEDIANA
+(IQR(subset_salarios$REMUNERACAO_REAIS)/ RES_DAM)
 #' 
 #' __Atividade II__
 #' 
@@ -178,7 +182,12 @@ print("Atividade")
 print("Atividade")
 
 ## Código aqui
-
+DAM <- function(x) {
+  (median( abs( x - median( x ))) / median( x ))
+}
+(DP = sd((2018 - year(subset_salarios$DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))))
+(RET_DAM = (DAM(2018 - year(subset_salarios$DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))))
+(IQR((2018 - year(subset_salarios$DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO))))
 #' 
 #' >> FIM ATIVIDADE
 #' 
@@ -238,6 +247,21 @@ cor(x = subset_salarios$REMUNERACAO_REAIS, y = 2018 - year( subset_salarios$DATA
 print("Atividade")
 
 ## Código aqui
+
+CORRELACAO_VALOR = cor(x = year (subset_salarios$DATA_INGRESSO_ORGAO), y = year( subset_salarios$DATA_DIPLOMA_INGRESSO_SERVICOPUBLICO ))
+CORRELACAO = (ifelse(CORRELACAO_VALOR>0,'POSITIVA','NEGATIVA'))
+if(CORRELACAO_VALOR>=0.9){
+  GRAU= ('E MUITO FORTE')
+} else if (CORRELACAO_VALOR>=0.7){
+  GRAU= ('E FORTE')
+}else if (CORRELACAO_VALOR >=0.5){
+  GRAU = ('E MODERADA')
+}else {
+  GRAU = ('E FRACA')
+};
+print(paste("CORRELACAO", CORRELACAO_VALOR,CORRELACAO,GRAU));
+
+
 
 #' 
 #' >> FIM ATIVIDADE
