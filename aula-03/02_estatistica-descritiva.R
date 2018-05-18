@@ -25,6 +25,7 @@
 #' 
 ## ----"Dataset", message=FALSE, warning=FALSE-----------------------------
 library(tidyverse)
+library(lubridate)
 
 salarios <- read_csv("aula-03/data/201802_dados_salarios_servidores.csv.gz")
 
@@ -218,7 +219,10 @@ subset_salarios %>%
   mutate(COMPARA = ifelse(MEDIA > MEDIANA, 'MEDIA_MAIOR', 'MEDIANA_MAIOR')) -> Medidas 
 
 Medidas%>%
-    select (UF_EXERCICIO, MEDIA,MEDIANA,COMPARA)%>%
+    select (UF_EXERCICIO, MEDIA,MEDIANA,COMPARA)
+
+#'Localiza se tem algum com mediana maior que a media
+Medidas%>%
     filter(COMPARA=='MEDIANA_MAIOR')%>%
     select (UF_EXERCICIO, MEDIA,MEDIANA,COMPARA)
 #' 
@@ -311,10 +315,19 @@ subset_salarios %>%
 #' 
 ## ------------------------------------------------------------------------
 print("Atividade")
-
+## Quantos servidores em percentual estão dentro de dois desvios padrão da remuneração deles
 ## Código aqui
 
+    dois_desvios <- 2 *sd(subset_salarios$REMUNERACAO_REAIS )
+    media <- mean(subset_salarios$REMUNERACAO_REAIS)
+    DOIS_DESVIOS_DA_MEDIA<- media + dois_desvios
+    subset_salarios%>%
+          filter(REMUNERACAO_REAIS <= DOIS_DESVIOS_DA_MEDIA)%>%
+    nrow() -> total_dentro_dois_desvios
+    total_dentro_dois_desvios / nrow(subset_salarios)
+
 #' 
+#'   
 #' __Atividade II__
 #' 
 #' No dataset de salários temos os diferentes cargos ocupados pelos servidores públicos federais. Liste os 10 cargos de __menor coeficiente de variação__ cujo cargo tenha mais que 100 servidores públicos. A lista deve conter, além do cargo e Coeficiente de Variação, a quantidade de servidores, o menor salário, o maior salário, o salário médio e o desvio padrão.
@@ -348,7 +361,7 @@ subset_salarios %>%
   filter(QTDE_SERVIDORES>100)%>%
   ungroup() %>%
   arrange(desc(CV))%>%
-  head(10)
+  head(10) # ou pode usar tail
 
 #' 
 #' ![](https://mathwithbaddrawings.files.wordpress.com/2016/07/20160712085402_00021.jpg)
