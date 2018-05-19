@@ -64,7 +64,7 @@ salarios %>% filter(DESCRICAO_CARGO %in% c("MINISTRO DE PRIMEIRA CLASSE", "ANALI
 ## Dica 2: Será necessário agrupar (group_by) por mais de uma variável para calcular as estatísticas solicitadas. 
 ## A função group_by permite múltiplos nomes de variáveis na mesma chamada.
 ## 
-### # ####
+### # #####
 salarios%>%
   filter(DESCRICAO_CARGO %in% cargos_diferente_lotacao) %>%
   mutate(MESMO_ORGAO = ifelse(ORGSUP_LOTACAO == ORGSUP_EXERCICIO,'SIM','NAO'))%>%

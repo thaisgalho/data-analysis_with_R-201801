@@ -317,7 +317,7 @@ subset_salarios %>%
 print("Atividade")
 ## Quantos servidores em percentual estão dentro de dois desvios padrão da remuneração deles
 ## Código aqui
-
+##subset_salarios%>%
     dois_desvios <- 2 *sd(subset_salarios$REMUNERACAO_REAIS )
     media <- mean(subset_salarios$REMUNERACAO_REAIS)
     DOIS_DESVIOS_DA_MEDIA<- media + dois_desvios
