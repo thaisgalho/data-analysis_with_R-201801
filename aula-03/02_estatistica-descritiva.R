@@ -217,8 +217,9 @@ subset_salarios %>%
   group_by(UF_EXERCICIO) %>%
   summarise( MEDIA = mean(REMUNERACAO_REAIS),MEDIANA = median(REMUNERACAO_REAIS))%>%
   mutate(COMPARA = ifelse(MEDIA > MEDIANA, 'MEDIA_MAIOR', 'MEDIANA_MAIOR')) -> Medidas 
-
+  
 Medidas%>%
+    head(10)
     select (UF_EXERCICIO, MEDIA,MEDIANA,COMPARA)
 
 #'Localiza se tem algum com mediana maior que a media

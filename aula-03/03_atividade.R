@@ -43,7 +43,7 @@ salarios%>%
   arrange(desc(SERVIDORES))%>%
   head(5)%>%
   pull(DESCRICAO_CARGO) -> cargos_diferente_lotacao
-
+  print(cargos_diferente_lotacao)
 ### 3 ####
 ## 
 ## Utilizando o vetor criado na atividade anterior, calcule a média e o desvio padrão de cada cargo, 
