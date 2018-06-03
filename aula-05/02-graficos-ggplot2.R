@@ -158,7 +158,29 @@ ggplot( aes( x = year, y = languages )) +
 #' 
 #' Repetir os gráficos de pontos e de sumário utilizando o ano de publicação no eixo x e a duração no eixo y. Cuidado com a escala do eixo y!
 #' 
-#' > FIM ATIVIDADE
+ted_talks_recentes%>%
+  mutate( year = year( published_date )) %>%
+  ggplot( aes( x = year, y = duration )) +
+  geom_point( alpha = .3 ) +
+  scale_x_continuous( breaks = 2005:2017) +
+  scale_y_continuous( breaks = seq(from = 100, to = 2000, by = 300 )) +
+  theme_bw()
+
+ted_talks_recentes %>%
+  mutate( year = year( published_date )) %>%
+  ggplot( aes( x = year, y = duration )) +
+  stat_summary(fun.data = mean_sdl) +
+  scale_x_continuous( breaks = 2005:2017 ) +
+  scale_y_continuous( breaks = seq(from = 100, to = 2000, by = 300 )) +
+  labs( x = "Ano de filmagem"
+        , y = "Duração"
+        , title = "Evolução da Quantidade de Línguas por vídeo ao longo dos anos"
+        , subtitle = "Período considerado somente a partir de 2005.\n O ponto é a média no ano e a barra vertical representa o intervalo de 2 desvios acima e abaixo da média."
+        , caption = "Dados de TED Talks de https://www.kaggle.com/rounakbanik/ted-talks/data") +
+  theme_bw()
+
+
+#' #' #' > FIM ATIVIDADE
 #' 
 #' ## Gráficos de barras
 #' 
