@@ -25,25 +25,22 @@ library(Hmisc)
 #' > FIM ATIVIDADE
 ### Carga dos dados de exemplo
 
-ted_talks <- read_csv("aula-05/data/ted_main.csv.gz") %>%
-  mutate( film_date = as_datetime(film_date) %>% as_date()
-        , published_date = as_datetime(published_date)) %>%
-  filter(published_date >= ymd(20120101))%>%
-  select(title, views, published_date) -> subset_ted_talks
-
-subset_ted_talks
-
-subset_ted_talks %>%
-  mutate( year = year( published_date )) %>%
-  group_by(year) %>%
-  summarise(sum_views = sum(views)) -> ted_talks_recentes
-  
-  V <- ggplot(ted_talks_recentes, aes(x = year))
-  V + geom_histogram(binwidth = 0.1)
-  V + geom_histogram(color="black", fill="white")
-  V + geom_histogram(aes(weight = sum_views), binwidth = 0.1) + ylab("views") + labs(title="Qtde visualizacoes por ano")
-  
-  
+ted_talks <- read_csv("aula-05/data/ted_main.csv.gz") %>% 
+     mutate( film_date = as_datetime(film_date) %>% as_date() 
+           , published_date = as_datetime(published_date),  
+             year = year(published_date)) %>% 
+     filter(year >= 2012)%>% 
+     select(title, views, published_date, year) -> subset_ted_talks 
 
 
+subset_ted_talks 
+ 
+
+ggplot(subset_ted_talks, aes(x = views)) +  
+     geom_histogram(color="black", fill="white", bins=12) +  
+      facet_wrap(~year, ncol=3) + 
+     scale_x_continuous(labels = scales::comma) + 
+     theme(axis.text.x = element_text(angle = 45, hjust = 1)) + 
+     labs(title="Qtde visualizacoes por ano") 
+ 
 
