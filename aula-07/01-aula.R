@@ -267,6 +267,19 @@ pgeom(6, prob=0.1, lower.tail = TRUE)
 #' 6 falhas ocorreram. Use como _seed_ os últimos 5 dígitos da sua matrícula. Veja no exemplo anterior o uso da 
 #' função `rle`.
 #' 
+df_geom_probs <- data_frame(x = 0:20, y=pgeom(0:20, prob = 0.1) * 100)
+ggplot(df_geom_probs, aes(x=x, y=y)) +
+  geom_col() +
+  scale_x_continuous(name = "tentativas até ser atendido", breaks=0:10) +
+  scale_y_continuous(name = "Prob (%)") +
+  theme_light()
+
+set.seed(30160)
+sample_head_tails <- rbernoulli(500)
+seq_head_tails <- rle(sample_head_tails)
+seq_head_tails$lengths[!seq_head_tails$values]
+
+
 #' 2. Você criou um sistema para reclamações da demora do atendimento de ligações telefônicas durante quedas de conectividade da Internet, e exige que os usuários acertem um CAPTCHA antes de postarem uma reclamação. Você observou que a probabilidade de um usuário acertar o CAPTCHA exibido no seu sistema é de 70%. 
 #' 
 #' - Seu sistema de monitoramento identificou que um usuário tentou 5 CAPTCHAS diferentes antes de conseguir reclamar do tempo de atendimento na última queda de conectividade. 
@@ -278,13 +291,6 @@ pgeom(6, prob=0.1, lower.tail = TRUE)
 #' 
 #' ### Variáveis aleatórias contínuas
 
-df_geom_probs <- data_frame(x = 0:20, y=pgeom(0:20, prob = 0.1) * 100)
-
-ggplot(df_geom_probs, aes(x=x, y=y)) +
-  geom_col() +
-  scale_x_continuous(name = "tentativas até ser atendido", breaks=0:10) +
-  scale_y_continuous(name = "Prob (%)") +
-  theme_light()
 
 
 #' 
@@ -307,6 +313,7 @@ br_height <-
   rename(year = Year_of_birth, height = Mean_height, lo_95 = Mean_height_lower_95perc, hi_95 = Mean_height_upper_95perc) %>%
   mutate(Sex = factor(Sex))
 
+br_height
 ggplot(br_height, aes(x=year, y=height, ymin=lo_95, ymax=hi_95)) +
   geom_line(color="black") +
   geom_ribbon(fill="lightgrey", alpha=.6) +
@@ -318,7 +325,18 @@ ggplot(br_height, aes(x=year, y=height, ymin=lo_95, ymax=hi_95)) +
 #' >> ATIVIDADE EM AULA
 #' 
 #' 1. Utilizando o data frame br_height e as operações do pacote __dplyr__ (__tidyverse__), selecione os dados de altura (height), menor altura dentro do IC (lo_95) e maior altura dentro do IC (hi_95) de acordo com o seu sexo e ano de nascença. Crie uma variável que é a divisão de sua altura pela média, e outra que informa se a sua altura está dentro ou fora do intervalo de confiança. Em aula, informe o professor sobre os 2 resultados.
-#' 
+library(tidyverse)
+
+br_height%>%
+  filter( Sex == "Women", year == 1974)%>%
+  select(height, lo_95, hi_95 ) -> subset_br 
+
+razao <- 172 / subset_br$height
+IC = ifelse(172 >= subset_br$lo_95 && 172 <= subset_br$hi_95 , 'SIM', 'NAO')
+
+print(paste('Razao Minha Altura e Media: ', minha_altura,'Está no intervalode confianca:', IC))
+
+
 #' 2. Baixe o relatório do [LEVANTAMENTO DO PERFIL ANTROPOMÉTRICO DA POPULAÇÃO BRASILEIRA USUÁRIA DO TRANSPORTE AÉREO NACIONAL – PROJETO CONHECER](http://www2.anac.gov.br/arquivos/pdf/Relatorio_Final_Projeto_Conhecer.pdf) e obtenha a média e o desvio padrão da amostra deste relatório (página 23).
 #' 
 #' 3. Considerando que o estudo da ANAC foi realizado entre os anos de 2004 e 2008, e que a média de idade é de 40 anos, com Desvio Padrão de idade de 12 anos, e assumindo como premissa que a altura da pessoa se mantem entre os 20 e os 60 anos, temos um intervalo de aproximadamente 1.65 desvios padrão da média. Utilizando a função `pnorm`, calcule os percentuais de 20 anos e 60 anos com a média (mean), e desvio padrão (sd) obtidos neste relatório. Utilize o parâmtro `lower.tail = FALSE` para 60 anos e `lower.tail = TRUE` para 20 anos. Quais são os valores obtidos? Conclua quanto representa, em percentual, os 1.65 desvios padrão.
