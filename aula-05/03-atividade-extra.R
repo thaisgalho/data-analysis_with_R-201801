@@ -32,9 +32,7 @@ ted_talks <- read_csv("aula-05/data/ted_main.csv.gz") %>%
      filter(year >= 2012)%>% 
      select(title, views, published_date, year) -> subset_ted_talks 
 
-
 subset_ted_talks 
- 
 
 ggplot(subset_ted_talks, aes(x = views)) +  
      geom_histogram(color="black", fill="white", bins=12) +  
