@@ -338,12 +338,33 @@ print(paste('Razao Minha Altura e Media: ', minha_altura,'Está no intervalode c
 
 
 #' 2. Baixe o relatório do [LEVANTAMENTO DO PERFIL ANTROPOMÉTRICO DA POPULAÇÃO BRASILEIRA USUÁRIA DO TRANSPORTE AÉREO NACIONAL – PROJETO CONHECER](http://www2.anac.gov.br/arquivos/pdf/Relatorio_Final_Projeto_Conhecer.pdf) e obtenha a média e o desvio padrão da amostra deste relatório (página 23).
-#' 
+#'
+#'  media            idade = 40, massa corporal = 82,8, estatura = 173,1, imc= 27,7  
+#'  desvio padrao    idade = 12, massa corporal = 14,2, estatura = 7,3, imc = 4,3
+#'  
 #' 3. Considerando que o estudo da ANAC foi realizado entre os anos de 2004 e 2008, e que a média de idade é de 40 anos, com Desvio Padrão de idade de 12 anos, e assumindo como premissa que a altura da pessoa se mantem entre os 20 e os 60 anos, temos um intervalo de aproximadamente 1.65 desvios padrão da média. Utilizando a função `pnorm`, calcule os percentuais de 20 anos e 60 anos com a média (mean), e desvio padrão (sd) obtidos neste relatório. Utilize o parâmtro `lower.tail = FALSE` para 60 anos e `lower.tail = TRUE` para 20 anos. Quais são os valores obtidos? Conclua quanto representa, em percentual, os 1.65 desvios padrão.
-#' 
+
+vinte <- pnorm(20, mean = 40, sd = 12, lower.tail = TRUE)
+sessenta <- pnorm(60, mean = 40, sd = 12, lower.tail = FALSE )
+
+print(paste(vinte, sessenta))
+
 #' 4. Assumindo que a altura aos 18 anos equivale à altura dos 20 aos 60 anos, selecione do data frame br_height a altura média de todas as pessoas que tinham entre 20 e 60 anos entre os anos de 2004 e 2008. Calcule a média de altura de homens e de mulheres neste período. Realize todo este exercício utilizando o __dplyr__. Responda: Com base nas alturas médias obtidas, você acha que mulheres participaram deste estudo?
-#' 
+
+br_height%>%
+  mutate(age_2004 = 2004 - year, age_2008 = 2008 - year)%>%
+  filter(age_2004>= 20, age_2008<= 60, Sex == "Men" )%>%
+  summarise(media_homen= mean(height))
+ 
+br_height%>%
+  mutate(age_2004 = 2004 - year, age_2008 = 2008 - year)%>%
+  filter(age_2004>= 20, age_2008<= 60, Sex == "Women" )%>%
+  summarise(media_mulher= mean(height))
+
+
 #' 5. A altura média dos homens calculada no exercício 4 está quantos desvios-padrão acima/abaixo da média anotada no exercício 2?
+#' 
+#' Está a menos de um desvio padrão abaixo da média, considerando o desvio padrão de 7,3 anotado lá no exercício 2
 #' 
 #' 6. Baixe os seguintes arquivos:
 #' - [Antropometria e estado nutricional de crianças, adolescentes e adultos no Brasil](https://ww2.ibge.gov.br/home/estatistica/populacao/condicaodevida/pof/2008_2009_encaa/defaulttabzip_brasil.shtm), baixe o arquivo Tabela Completa Brasil.
