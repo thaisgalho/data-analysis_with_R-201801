@@ -267,6 +267,23 @@ pgeom(6, prob=0.1, lower.tail = TRUE)
 #' 6 falhas ocorreram. Use como _seed_ os últimos 5 dígitos da sua matrícula. Veja no exemplo anterior o uso da 
 #' função `rle`.
 #' 
+
+#'MINHA SOLUÇÃO
+df_geom_probs <- data_frame(x = 0:20, y=pgeom(0:20, prob = 0.1) * 100)
+ggplot(df_geom_probs, aes(x=x, y=y)) +
+  geom_col() +
+  scale_x_continuous(name = "tentativas até ser atendido", breaks=0:10) +
+  scale_y_continuous(name = "Prob (%)") +
+  theme_light()
+
+set.seed(30160)
+sample_head_tails <- rbernoulli(500)
+seq_head_tails <- rle(sample_head_tails)
+seq_head_tails$lengths[!seq_head_tails$values]
+
+
+
+#' SOLUÇÃO DO CRISTOFER
 df_geom_probs <- data_frame(x = 0:20, y=pgeom(0:20, prob = 0.1) * 100)
 ggplot(df_geom_probs, aes(x=x, y=y)) +
   geom_col() +
@@ -325,6 +342,8 @@ ggplot(br_height, aes(x=year, y=height, ymin=lo_95, ymax=hi_95)) +
 #' >> ATIVIDADE EM AULA
 #' 
 #' 1. Utilizando o data frame br_height e as operações do pacote __dplyr__ (__tidyverse__), selecione os dados de altura (height), menor altura dentro do IC (lo_95) e maior altura dentro do IC (hi_95) de acordo com o seu sexo e ano de nascença. Crie uma variável que é a divisão de sua altura pela média, e outra que informa se a sua altura está dentro ou fora do intervalo de confiança. Em aula, informe o professor sobre os 2 resultados.
+
+#' MINHA SOLUÇÃO 
 library(tidyverse)
 
 br_height%>%
@@ -334,36 +353,74 @@ br_height%>%
 razao <- 172 / subset_br$height
 IC = ifelse(172 >= subset_br$lo_95 && 172 <= subset_br$hi_95 , 'SIM', 'NAO')
 
-print(paste('Razao Minha Altura e Media: ', minha_altura,'Está no intervalode confianca:', IC))
+print(paste('Razao Minha Altura e Media: ', razao,'Está no intervalode confianca:', IC))
 
+
+
+#' SOLUÇÃO DO CRISTOFER
+library(tidyverse)
+
+br_height <- 
+  read_csv( "aula-07/data/Brazil.csv" ) %>% 
+  rename( year = Year_of_birth, height = Mean_height, lo_95 = Mean_height_lower_95perc, hi_95 = Mean_height_upper_95perc ) %>%
+  mutate( Sex = factor( Sex ))
+
+
+br_height %>%
+  filter( year == 1974, Sex == "Women" ) %>%
+  select( height, lo_95, hi_95 ) %>%
+  mutate( height_ratio = 172 / height, heigh_in_ic = between( 172, lo_95, hi_95 ))
 
 #' 2. Baixe o relatório do [LEVANTAMENTO DO PERFIL ANTROPOMÉTRICO DA POPULAÇÃO BRASILEIRA USUÁRIA DO TRANSPORTE AÉREO NACIONAL – PROJETO CONHECER](http://www2.anac.gov.br/arquivos/pdf/Relatorio_Final_Projeto_Conhecer.pdf) e obtenha a média e o desvio padrão da amostra deste relatório (página 23).
 #'
 #'  media            idade = 40, massa corporal = 82,8, estatura = 173,1, imc= 27,7  
 #'  desvio padrao    idade = 12, massa corporal = 14,2, estatura = 7,3, imc = 4,3
+media_anac_altura <- 173.1
+sd_anac_altura <- 7.3
+
+media_anac_idade <- 40
+sd_anac_idade <- 12
 #'  
 #' 3. Considerando que o estudo da ANAC foi realizado entre os anos de 2004 e 2008, e que a média de idade é de 40 anos, com Desvio Padrão de idade de 12 anos, e assumindo como premissa que a altura da pessoa se mantem entre os 20 e os 60 anos, temos um intervalo de aproximadamente 1.65 desvios padrão da média. Utilizando a função `pnorm`, calcule os percentuais de 20 anos e 60 anos com a média (mean), e desvio padrão (sd) obtidos neste relatório. Utilize o parâmtro `lower.tail = FALSE` para 60 anos e `lower.tail = TRUE` para 20 anos. Quais são os valores obtidos? Conclua quanto representa, em percentual, os 1.65 desvios padrão.
 
+#' MINHA SOLUÇÃO 
 vinte <- pnorm(20, mean = 40, sd = 12, lower.tail = TRUE)
 sessenta <- pnorm(60, mean = 40, sd = 12, lower.tail = FALSE )
 
 print(paste(vinte, sessenta))
+#' SOLUÇÃO DO CRISTOFER
+pnorm( mean = media_anac_idade, sd = sd_anac_idade, q = 60, lower.tail = FALSE )
+pnorm( mean = media_anac_idade, sd = sd_anac_idade, q = 20, lower.tail = TRUE  )
+
+# 1.65 * sd_anac_idade ~~ 95%
 
 #' 4. Assumindo que a altura aos 18 anos equivale à altura dos 20 aos 60 anos, selecione do data frame br_height a altura média de todas as pessoas que tinham entre 20 e 60 anos entre os anos de 2004 e 2008. Calcule a média de altura de homens e de mulheres neste período. Realize todo este exercício utilizando o __dplyr__. Responda: Com base nas alturas médias obtidas, você acha que mulheres participaram deste estudo?
 
+#' MINHA SOLUÇÃO 
 br_height%>%
   mutate(age_2004 = 2004 - year, age_2008 = 2008 - year)%>%
   filter(age_2004>= 20, age_2008<= 60, Sex == "Men" )%>%
   summarise(media_homen= mean(height))
- 
+
 br_height%>%
   mutate(age_2004 = 2004 - year, age_2008 = 2008 - year)%>%
   filter(age_2004>= 20, age_2008<= 60, Sex == "Women" )%>%
   summarise(media_mulher= mean(height))
 
+#' SOLUÇÃO DO CRISTOFER
+menor_ano <- 2004 - 60
+maior_ano <- 2008 - 20
+
+br_height %>%
+  filter( between( year, menor_ano, maior_ano )) %>%
+  group_by( Sex ) %>%
+  summarise( mean_height = mean( height )) %>%
+  ungroup()
 
 #' 5. A altura média dos homens calculada no exercício 4 está quantos desvios-padrão acima/abaixo da média anotada no exercício 2?
-#' 
+
+( 171 - media_anac_altura ) / sd_anac_idade
+
 #' Está a menos de um desvio padrão abaixo da média, considerando o desvio padrão de 7,3 anotado lá no exercício 2
 #' 
 #' 6. Baixe os seguintes arquivos:
