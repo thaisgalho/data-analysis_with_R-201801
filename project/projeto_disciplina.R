@@ -12,6 +12,9 @@ insta_products <- read_csv( "project/order_products_instacart.csv" ) # Produtos 
 
 #1 # Quantos dos produtos do cadastro nunca foram comprados?
 
+products %>%
+  anti_join( insta_products, by = "product_id")%>% 
+  summarise(nao_vendidos=n())
 
 #2 # Crie um dataframe com os dados combinados de produtos, corredores e departamentos. 
 

@@ -74,3 +74,4 @@ salarios%>%
            MENOR_SALARIO = min(REMUNERACAO_REAIS), MAIOR_SALARIO = max(REMUNERACAO_REAIS))
 ##grande diferença no desvio padrao nos cargos entre os lotados no mesmo orgao e os não lotados no mesmo orgao
 
+## a media salarial dos lotados no mesmo orgao tende a ser maior
