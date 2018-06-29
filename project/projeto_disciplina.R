@@ -1,3 +1,12 @@
+##################################################
+# Projeto Final em grupo:
+#
+# Roberto Argenta Coutinho
+# Thais Galho
+##################################################
+
+
+
 # Descrição dos dados: https://tech.instacart.com/3-million-instacart-orders-open-sourced-d40d29ead6f2
 # Estamos trabalhando com somente uma amostra do total de pedidos. O dataset abaixo não possui 3 milhões de pedidos ;)
 library( tidyverse )
@@ -72,13 +81,15 @@ insta_products %>%
   filter(department != "missing" | aisle != "missing") -> orders_filtered_joined
 
 
-#6 # Crie um dataframe que combine todos os dataframes através das suas chaves de ligação. Para produtos de pedidos, use o dataframe da atividade 4
+#6 # Crie um dataframe que combine todos os dataframes através das suas chaves de ligação. Para produtos de pedidos, use o dataframe da atividade 4 (nao seria 5????)
 
 insta_orders %>%
   left_join(orders_filtered_joined, by="order_id") -> order_complete
 
 # Transforme as variáveis user_id, department e aisle em factor
 order_complete$user_id = as.factor(order_complete$user_id)
+order_complete$department = as.factor(order_complete$department)
+order_complete$aisle = as.factor(order_complete$aisle)
 
 # Transforme a variável order_hour_of_day em um factor ordenado (ordered)
 order_complete$order_hour_of_day = factor(order_complete$order_hour_of_day, ordered=T)
@@ -129,10 +140,15 @@ ggplot(t2, aes(x=order_hour_of_day, y=Mean)) +
 
 # Você consegue identificar algum produto com padrão de venda diferente dos demais? 
 
+#[RESPOSTA]Sim, existem 2 produtos no hora 03 que sao inversamente proporcionais em termos de venda
+
 
 #10 # Calcule as seguintes estatísticas descritivas sobre a quantidade de pedidos por dia, para cada hora do dia. O resultado final deve ser exibido para cada hora do dia:
 # Média, Desvio Padrão, Mediana, Mínimo e Máximo
 # Considerando os valores calculados, você acredita que a distribuição por hora é gaussiana? 
+
+#[RESPOSTA] Sim, a distribuicao demonstra uma gaussiana, pois ela tem um pico centrado na media e as
+# extremidades sao menores.
 
 order_complete %>%
   group_by(order_hour_of_day) %>%
@@ -195,7 +211,10 @@ ggplot(t, aes(x=meanTime)) +
   labs( x = "Tempo Medio Ultimo Pedido"
         , y = "Qtde usuarios" )
 
-#15 # Faça um gráfico de barras com a quantidade de usuários em cada número de dias desde o pedido anterior. Há alguma similaridade entre os gráficos das atividades 14 e 15? 
+#15 # Faça um gráfico de barras com a quantidade de usuários em cada número de dias desde o pedido anterior. 
+
+#Há alguma similaridade entre os gráficos das atividades 14 e 15? 
+#[RESPOSTA] Sim, ambas sao iguais
 
 ggplot(order_complete, aes(x=days_since_prior_order)) +
   geom_bar( fill="blue", color = "blue", alpha=0.6 ) +
@@ -203,7 +222,10 @@ ggplot(order_complete, aes(x=days_since_prior_order)) +
         , y = "Qtde usuarios" )
 
 
-#16 # Repita o gráfico da atividade 14 mantendo somente os usuários com no mínimo 5 pedidos. O padrão se mantém?
+#16 # Repita o gráfico da atividade 14 mantendo somente os usuários com no mínimo 5 pedidos. 
+
+#O padrão se mantém?
+# [RESPOSTA] Sim.
 
 order_complete%>%
   group_by(user_id)%>%
@@ -282,4 +304,15 @@ wilcox.test(meanCount ~ order_dow,
             subset = order_dow %in% c(3, 4), 
             conf.int = TRUE)
 
-pairwise.wilcox.test(days.selected$meanCount, days.selected$order_dow, p.adjust.method = "BH")
+pairwise.wilcox.test(days.selected$meanCount, 
+                     days.selected$order_dow, 
+                     p.adjust.method = "BH")
+
+ggplot(days.selected, aes(x=order_hour_of_day, 
+                          y=meanCount, 
+                          group=as.factor(order_dow),
+                          color=as.factor(order_dow))) +
+  labs( x = "Horas ao longo do dia", 
+        y = "Media", 
+        color="Dia da semana" ) +
+  geom_line()
